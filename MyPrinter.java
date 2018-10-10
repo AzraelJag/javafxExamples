@@ -3,6 +3,7 @@ package javafxprogramme;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.Pos;
 import javafx.print.JobSettings;
 import javafx.print.PageLayout;
 import javafx.print.PageOrientation;
@@ -20,7 +21,12 @@ import javafx.stage.Stage;
 
 public class MyPrinter extends Application {
 	
-	// Create the TextArea
+		double randOben   = 50;
+		double randUnten  = 50;
+		double randLinks  = 100;
+		double randRechts = 100;
+	
+	   // Create the TextArea
 		final TextArea textArea = new TextArea();
 		// Create the JobStatus Label	
 		private final Label jobStatus = new Label();
@@ -38,6 +44,8 @@ public class MyPrinter extends Application {
 
 			// Create the TextArea
 			final TextArea textArea = new TextArea();
+			textArea.setPrefHeight(300);  
+			textArea.setPrefWidth(300);    
 			
 			// Create the Buttons
 			Button printSetupButton = new Button("Print Setup and Print");
@@ -48,8 +56,11 @@ public class MyPrinter extends Application {
 	            public void handle(ActionEvent event) 
 	            {
 	            	Label label1 = new Label("Labeltext: 12345");
+	            	HBox hbox = new HBox(label1);
+	            	hbox.setAlignment(Pos.CENTER);
 	            	VBox content = new VBox(10);
-	            	content.getChildren().addAll(textArea, label1);
+	            	content.getChildren().addAll(textArea, hbox);
+	            	content.setAlignment(Pos.CENTER);
 	            	printSetup(content, stage);
 	            }
 	        });
@@ -66,7 +77,7 @@ public class MyPrinter extends Application {
 			
 			root.getChildren().addAll(textLabel, textArea, buttonBox, jobStatusBox);
 			// Set the Size of the VBox
-			root.setPrefSize(400, 300);		
+			root.setPrefSize(300, 300);		
 			
 			// Set the Style-properties of the VBox
 			root.setStyle("-fx-padding: 10;" +
@@ -88,6 +99,7 @@ public class MyPrinter extends Application {
 		
 		private void printSetup(Node node, Stage owner) 
 		{
+			
 			// Create the PrinterJob		
 			PrinterJob job = PrinterJob.createPrinterJob();
 			printAttributes(job);
@@ -98,6 +110,7 @@ public class MyPrinter extends Application {
 			}
 
 			// Show the print setup dialog
+			job.showPageSetupDialog(owner);
 			boolean proceed = job.showPrintDialog(owner);
 			
 			if (proceed) 
@@ -130,7 +143,6 @@ public class MyPrinter extends Application {
 			
 			// Get the Page Layout
 			PageLayout pageLayout = jobSettings.getPageLayout();
-
 			
 			// Get The Printer
 			Printer printer = printerJob.getPrinter();
@@ -141,11 +153,11 @@ public class MyPrinter extends Application {
 			//		PageOrientation.PORTRAIT,Printer.MarginType.EQUAL);
 			
 			pageLayout = printer.createPageLayout(Paper.A4,
-					PageOrientation.PORTRAIT,150,150,50,50);
+					PageOrientation.PORTRAIT,randLinks,randRechts,randOben,randUnten);
 			
 			jobSettings.setPageLayout(pageLayout);
 			
-			
+			/*
 			// Get the Page Attributes
 			double pgW = pageLayout.getPrintableWidth();
 			double pgH = pageLayout.getPrintableHeight();
@@ -171,5 +183,6 @@ public class MyPrinter extends Application {
 			stage1.setTitle("Seiteneinstellungen");
 			// Display the Stage
 			stage1.show();		
+			*/
 		}
 }
